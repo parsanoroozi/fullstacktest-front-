@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React from "react";
+import axios from "axios";
+import Form from "./components/form";
+import List from "./components/list";
 
 function App() {
+  const [list, setList] = React.useState([]);
+
+  React.useEffect(() => {
+    fetchList();
+  }, []);
+
+  const fetchList = async () => {
+    const res = await axios.get("http://localhost:8080/getAll");
+    setList(res.data);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "baseline",
+      }}
+    >
+      <List list={list} fetchList={fetchList} setList={setList} />
+      <Form setList={setList} fetchList={fetchList} />
     </div>
   );
 }
